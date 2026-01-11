@@ -17,6 +17,7 @@ export interface WritingRequest {
   topic: string;
   format: WritingFormat;
   grade: GradeLevel;
+  wordCount: number;
 }
 
 export interface WritingResponse {

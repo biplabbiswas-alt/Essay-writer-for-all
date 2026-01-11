@@ -24,6 +24,7 @@ export const generateWritingContent = async (request: WritingRequest): Promise<W
   const prompt = `
     Write a ${request.format} on the topic: "${request.topic}".
     The target audience is students of ${request.grade} level.
+    Word limit requirement: Approximately ${request.wordCount} words.
     Keep the language simple and follow the standard Indian school board format for ${request.format}.
     Also provide 3 specific 'Teacher Tips' to help the student improve this piece of writing.
   `;

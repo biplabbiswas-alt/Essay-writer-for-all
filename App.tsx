@@ -16,10 +16,13 @@ const App: React.FC = () => {
   const [topic, setTopic] = useState('');
   const [format, setFormat] = useState<WritingFormat>(WritingFormat.ESSAY);
   const [grade, setGrade] = useState<GradeLevel>(GradeLevel.SECONDARY);
+  const [wordCount, setWordCount] = useState<number>(200);
   const [result, setResult] = useState<WritingResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<SavedDraft[]>([]);
+
+  const wordCountOptions = [100, 150, 200, 300, 350, 400, 500, 600, 700];
 
   // Safety check for API Key on mount
   useEffect(() => {
@@ -38,7 +41,7 @@ const App: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await generateWritingContent({ topic, format, grade });
+      const data = await generateWritingContent({ topic, format, grade, wordCount });
       setResult(data);
       
       const newDraft: SavedDraft = {
@@ -123,6 +126,26 @@ const App: React.FC = () => {
             </div>
 
             <div className="space-y-4">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">Length (Words)</label>
+              <div className="flex flex-wrap gap-2">
+                {wordCountOptions.map((count) => (
+                  <button
+                    key={count}
+                    type="button"
+                    onClick={() => setWordCount(count)}
+                    className={`py-2 px-4 rounded-lg text-sm font-bold transition-all duration-200 ${
+                      wordCount === count
+                        ? 'bg-indigo-600 text-white shadow-md'
+                        : 'bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-200'
+                    }`}
+                  >
+                    {count}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
               <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">Draft Topic</label>
               <input
                 type="text"
@@ -180,7 +203,7 @@ const App: React.FC = () => {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
                 <div>
                   <h2 className="text-3xl font-extrabold text-slate-900">Guru's Draft</h2>
-                  <p className="text-slate-500 font-medium tracking-wide uppercase text-xs">{format} &bull; {grade}</p>
+                  <p className="text-slate-500 font-medium tracking-wide uppercase text-xs">{format} &bull; {grade} &bull; target {wordCount} words</p>
                 </div>
                 <div className="flex space-x-3">
                   <button
